@@ -16,13 +16,21 @@ function getPool(): Pool {
   const sslEnv = process.env.DATABASE_SSL;
   const useSsl = sslEnv ? sslEnv === 'true' : /\.render\.com/.test(url);
 
-  g.__seriosPool = new Pool({
+  const pool = new Pool({
     connectionString: url,
     ssl: useSsl ? { rejectUnauthorized: false } : undefined,
     max: 5,
     idleTimeoutMillis: 30_000,
   });
-  return g.__seriosPool;
+
+  // Todas as tabelas do Projeto Serio$ vivem no esquema "serios", isoladas de outras
+  // tabelas que a mesma base de dados possa ter (ex.: de outros projetos).
+  pool.on('connect', (client) => {
+    void client.query('set search_path to serios');
+  });
+
+  g.__seriosPool = pool;
+  return pool;
 }
 
 /** Cria as tabelas na primeira utilização (idempotente). */

@@ -4,6 +4,8 @@
  * Uma cópia legível está em db/schema.sql.
  */
 export const SCHEMA_SQL = String.raw`
+create schema if not exists serios;
+
 create table if not exists participants (
   id                uuid primary key default gen_random_uuid(),
   full_name         text        not null,

@@ -2,6 +2,10 @@
 -- A aplicação aplica este esquema automaticamente no primeiro acesso (lib/schema-sql.ts).
 -- Só precisas de o correr manualmente se quiseres (idempotente).
 
+-- As tabelas ficam num esquema próprio ("serios"), isolado de outros projetos na mesma base.
+create schema if not exists serios;
+set search_path to serios;
+
 create table if not exists participants (
   id                uuid primary key default gen_random_uuid(),
   full_name         text        not null,

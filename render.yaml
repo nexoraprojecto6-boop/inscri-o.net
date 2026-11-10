@@ -1,11 +1,7 @@
-# Blueprint da Render: cria a base de dados PostgreSQL e o serviço web.
+# Blueprint da Render: cria o serviço web.
+# A base de dados NÃO é criada aqui (a Render só permite 1 base gratuita por conta):
+# usa-se uma base PostgreSQL já existente, através de DATABASE_URL.
 # Render → New → Blueprint → escolhe este repositório.
-databases:
-  - name: serios-db
-    databaseName: serios
-    user: serios
-    plan: free
-
 services:
   - type: web
     name: projeto-serios
@@ -18,9 +14,7 @@ services:
       - key: NODE_VERSION
         value: 20
       - key: DATABASE_URL
-        fromDatabase:
-          name: serios-db
-          property: connectionString
+        sync: false
       - key: AUTH_SECRET
         generateValue: true
       - key: ADMIN_EMAIL

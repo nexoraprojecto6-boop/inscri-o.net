@@ -33,7 +33,7 @@ render.yaml     Blueprint da Render (base de dados + serviço web)
 
 | Variável | Descrição |
 |---|---|
-| `DATABASE_URL` | URL da base PostgreSQL da Render (na Render é preenchida pelo Blueprint) |
+| `DATABASE_URL` | **Internal Database URL** da tua base PostgreSQL da Render (Dashboard → a base → Connections). As tabelas ficam no esquema `serios`, sem tocar noutras tabelas da mesma base |
 | `ADMIN_EMAIL` | email de acesso ao `/admin` |
 | `ADMIN_PASSWORD` | palavra-passe do `/admin` (usa uma forte, 12+ caracteres) |
 | `AUTH_SECRET` | texto aleatório longo que assina a sessão (na Render é gerado automaticamente) |
@@ -45,7 +45,7 @@ Estas variáveis são todas definidas no painel da Render e nunca vão para o Gi
 
 1. Faz commit deste projeto no GitHub (a raiz do repositório deve ter `package.json` e `render.yaml`).
 2. Em [dashboard.render.com](https://dashboard.render.com): **New → Blueprint** e escolhe o repositório.
-3. A Render lê o `render.yaml` e propõe criar a base `serios-db` e o serviço `projeto-serios`. Preenche quando pedir: `ADMIN_EMAIL`, `ADMIN_PASSWORD` e `NEXT_PUBLIC_DERIV_AFFILIATE_URL`.
+3. A Render lê o `render.yaml` e propõe criar o serviço `projeto-serios`. Preenche quando pedir: `DATABASE_URL` (Internal Database URL da tua base existente; o serviço tem de estar na mesma região da base), `ADMIN_EMAIL`, `ADMIN_PASSWORD` e `NEXT_PUBLIC_DERIV_AFFILIATE_URL`.
 4. Clica em **Apply**. Espera o build terminar (alguns minutos) e abre o URL `https://projeto-serios.onrender.com` (ou o nome que a Render atribuir).
 5. Faz uma inscrição de teste. Depois abre `/login` com `ADMIN_EMAIL` e `ADMIN_PASSWORD`.
 
