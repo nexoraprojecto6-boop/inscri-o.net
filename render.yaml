@@ -1,19 +1,22 @@
-# Blueprint da Render: cria o serviço web.
+# Blueprint da Render: cria o serviço web (API + painel /admin).
 # A base de dados NÃO é criada aqui (a Render só permite 1 base gratuita por conta):
-# usa-se uma base PostgreSQL já existente, através de DATABASE_URL.
+# usa-se uma base PostgreSQL já existente, através da Internal Database URL.
+# Todas as credenciais ficam só no dashboard da Render (sync: false = pedidas ao aplicar).
 # Render → New → Blueprint → escolhe este repositório.
 services:
   - type: web
     name: projeto-serios
     runtime: node
     plan: free
+    # Tem de estar na MESMA região da base de dados para a Internal URL funcionar.
+    # region: oregon
     buildCommand: npm install && npm run build
     startCommand: npm start
     healthCheckPath: /
     envVars:
       - key: NODE_VERSION
         value: 20
-      - key: DATABASE_URL
+      - key: DATABASE_URL # Internal Database URL da base existente
         sync: false
       - key: AUTH_SECRET
         generateValue: true

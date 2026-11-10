@@ -11,7 +11,8 @@ function getPool(): Pool {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error('Falta a variável de ambiente DATABASE_URL.');
 
-  // A URL externa da Render (…render.com) exige SSL; a interna (rede privada) não.
+  // Em produção usa-se a Internal Database URL da Render (rede privada, sem SSL).
+  // A URL externa (…render.com), usada só em desenvolvimento local, exige SSL.
   // Pode forçar-se com DATABASE_SSL=true|false.
   const sslEnv = process.env.DATABASE_SSL;
   const useSsl = sslEnv ? sslEnv === 'true' : /\.render\.com/.test(url);
@@ -19,8 +20,13 @@ function getPool(): Pool {
   const pool = new Pool({
     connectionString: url,
     ssl: useSsl ? { rejectUnauthorized: false } : undefined,
-    max: 5,
+    max: Number(process.env.DATABASE_POOL_MAX) || 5,
     idleTimeoutMillis: 30_000,
+  });
+
+  // Sem este handler, um erro numa ligação inativa (ex.: a base reinicia) derruba o processo.
+  pool.on('error', (err) => {
+    console.error('[db:pool]', err);
   });
 
   // Todas as tabelas do Projeto Serio$ vivem no esquema "serios", isoladas de outras
