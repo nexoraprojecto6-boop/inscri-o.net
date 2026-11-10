@@ -1,45 +1,21 @@
-import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { SESSION_COOKIE, verifySessionToken } from '@/lib/session';
 
 /**
- * Atualiza a sessão e bloqueia /admin e /api/admin a quem não tem sessão.
- * A verificação final de "é administrador" é feita no servidor (lib/auth.ts).
+ * Bloqueia /admin e /api/admin a quem não tem uma sessão de administrador válida
+ * (cookie assinado). A verificação é repetida no servidor em lib/auth.ts.
  */
 export async function middleware(request: NextRequest) {
-  const isApi = request.nextUrl.pathname.startsWith('/api/');
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const session = await verifySessionToken(
+    request.cookies.get(SESSION_COOKIE)?.value,
+    process.env.AUTH_SECRET,
+  );
+  if (session) return NextResponse.next();
 
-  const deny = () =>
-    isApi
-      ? NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
-      : NextResponse.redirect(new URL('/login', request.url));
-
-  if (!url || !anonKey) return deny();
-
-  let response = NextResponse.next({ request });
-
-  const supabase = createServerClient(url, anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-        response = NextResponse.next({ request });
-        cookiesToSet.forEach(({ name, value, options }) =>
-          response.cookies.set(name, value, options),
-        );
-      },
-    },
-  });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) return deny();
-  return response;
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 });
+  }
+  return NextResponse.redirect(new URL('/login', request.url));
 }
 
 export const config = {

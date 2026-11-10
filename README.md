@@ -1,159 +1,75 @@
 # Projeto Serio$
 
-Landing page de inscrição para o evento **Projeto Serio$**, com base de dados de participantes, contagem pública de inscritos, rastreio de cliques no link de afiliado Deriv e um painel administrativo simples em `/admin`.
+Landing page de inscrição para o evento **Projeto Serio$**, com base de dados PostgreSQL (Render), contagem pública de inscritos, rastreio de cliques no link de afiliado Deriv e painel administrativo simples em `/admin`.
 
-> **Estado dos testes:** este projeto foi escrito sem executar `npm install`, `tsc`, `lint` ou `build` no ambiente de desenvolvimento. Antes de publicar, corre uma vez `npm install && npm run typecheck && npm run build` no teu computador (ver secção 5) e corrige qualquer aviso que apareça.
-
----
+> **Estado dos testes:** o código foi escrito sem executar `npm install`, `tsc`, lint ou build. Na primeira publicação, se o build falhar, copia o erro do log para o suporte e corrige.
 
 ## 1. Funcionalidades
 
-**Página pública (`/`)**
-- Header com navegação, hero, apresentação do evento, benefícios, secção sobre a Deriv, processo de participação, FAQ, chamada final e footer.
-- Formulário de inscrição (nome, email, indicativo + telefone, "Já tens conta na Deriv?", consentimentos opcionais de SMS e WhatsApp) com validação no frontend e no servidor, mensagens de erro, indicador de carregamento e mensagem de sucesso.
-- Se o participante indicar que **não** tem conta Deriv, aparece um botão para criar conta através do link de afiliado.
-- Contador "Já somos X participantes inscritos!" lido da base de dados (nunca números fictícios) e atualizado após cada inscrição. Só é exposto um número, nunca dados pessoais.
-- Proteções: validação server-side (Zod), restrições `UNIQUE` (email e telefone) contra duplicados, botão bloqueado durante o envio, campo isco (honeypot), tempo mínimo de preenchimento e limite de pedidos por IP.
-
-**Rastreio de cliques Deriv**
-- O botão Deriv aponta para `/api/tracking`, que regista o clique no servidor (data/hora, sessão anónima, participante quando conhecido) e redireciona para o link de afiliado.
-- Um clique **não** significa que a conta foi criada. O painel mostra "cliques", nunca "contas verificadas".
-
-**Painel administrativo (`/admin`)**
-- Acesso por email e palavra-passe (Supabase Auth). Não existe registo público: só contas listadas na tabela `admins` entram.
-- Indicadores: total de inscritos, telefones recolhidos, declarações de ter / não ter conta Deriv, total de cliques (e sessões únicas).
-- Tabela de participantes com pesquisa por nome, email e telefone, botão Atualizar, exportação de todos os contactos em CSV e Terminar sessão.
+- Landing page completa (header, hero, evento, benefícios, Deriv, processo, FAQ, chamada final, footer). Textos em `lib/content.ts`.
+- Formulário de inscrição com validação no browser e no servidor, proteção contra duplicados (`UNIQUE` em email e telefone), honeypot, tempo mínimo e limite por IP.
+- Se o participante não tem conta Deriv, aparece o botão de afiliado.
+- Contador "Já somos X participantes inscritos!" lido da base de dados (só um número, nunca dados pessoais).
+- Rastreio de cliques: `/api/tracking` regista o clique no servidor e redireciona. Um clique **não** é uma conta criada.
+- `/admin` protegido por login: indicadores, tabela com pesquisa (nome, email, telefone), Atualizar, exportar CSV e Terminar sessão.
 
 ## 2. Tecnologias
 
-Next.js 15 (App Router, route handlers), React 19, TypeScript, Tailwind CSS 3, Supabase (PostgreSQL + Auth), Zod, hospedagem na Vercel.
+Next.js 15, React 19, TypeScript, Tailwind CSS, PostgreSQL (Render) com o driver `pg`, Zod. Hospedagem na Render.
 
-## 3. Estrutura de pastas
+## 3. Estrutura
 
 ```
-projeto-serios/
-├── app/
-│   ├── api/
-│   │   ├── registrations/route.ts   # POST: inscrição | GET: contagem pública
-│   │   ├── tracking/route.ts        # regista clique e redireciona para a Deriv
-│   │   └── admin/
-│   │       ├── data/route.ts        # estatísticas + participantes (só admin)
-│   │       ├── export/route.ts      # CSV (só admin)
-│   │       └── logout/route.ts
-│   ├── admin/page.tsx               # painel
-│   ├── login/page.tsx               # início de sessão
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx                     # landing page
-├── components/                      # secções da landing, formulário, contador
-│   └── admin/                       # AdminDashboard, ParticipantsTable, StatisticsCards
-├── lib/
-│   ├── content.ts                   # TODOS os textos da landing page
-│   ├── countries.ts                 # lista de indicativos
-│   ├── validations.ts               # esquemas Zod (cliente + servidor)
-│   ├── auth.ts                      # verificação de administrador
-│   ├── rate-limit.ts, utils.ts, types.ts
-│   └── supabase/                    # clientes: admin (servidor), server, browser
-├── public/                          # imagens e ícones
-├── supabase/schema.sql              # tabelas, RLS e funções
-├── middleware.ts                    # protege /admin e /api/admin
-├── .env.example
-└── vercel.json
+app/            páginas (/, /admin, /login) e rotas /api
+components/     secções da landing, formulário, contador, painel (admin/)
+lib/            content.ts (textos), db.ts (PostgreSQL), schema-sql.ts (tabelas),
+                session.ts + auth.ts (login do admin), validations.ts, ...
+db/schema.sql   cópia legível do esquema
+middleware.ts   protege /admin e /api/admin
+render.yaml     Blueprint da Render (base de dados + serviço web)
 ```
 
-## 4. Alterar textos e informações
+## 4. Variáveis de ambiente
 
-Todos os textos estão em **`lib/content.ts`**. A **data, o local e os contactos do evento ainda não foram fornecidos**, por isso aparecem como "A anunciar" (`about.eventDetails`). Os textos de benefícios, FAQ e da secção Deriv são uma proposta inicial: revê-os antes de publicar.
+| Variável | Descrição |
+|---|---|
+| `DATABASE_URL` | URL da base PostgreSQL da Render (na Render é preenchida pelo Blueprint) |
+| `ADMIN_EMAIL` | email de acesso ao `/admin` |
+| `ADMIN_PASSWORD` | palavra-passe do `/admin` (usa uma forte, 12+ caracteres) |
+| `AUTH_SECRET` | texto aleatório longo que assina a sessão (na Render é gerado automaticamente) |
+| `NEXT_PUBLIC_DERIV_AFFILIATE_URL` | teu link de afiliado, começado por `https://` |
 
-## 5. Executar localmente
+Estas variáveis são todas definidas no painel da Render e nunca vão para o GitHub. As tabelas são criadas automaticamente no primeiro acesso à base: não há SQL para correr à mão.
 
-Requisitos: Node.js 18.18 ou superior.
+## 5. Publicar na Render (Blueprint)
+
+1. Faz commit deste projeto no GitHub (a raiz do repositório deve ter `package.json` e `render.yaml`).
+2. Em [dashboard.render.com](https://dashboard.render.com): **New → Blueprint** e escolhe o repositório.
+3. A Render lê o `render.yaml` e propõe criar a base `serios-db` e o serviço `projeto-serios`. Preenche quando pedir: `ADMIN_EMAIL`, `ADMIN_PASSWORD` e `NEXT_PUBLIC_DERIV_AFFILIATE_URL`.
+4. Clica em **Apply**. Espera o build terminar (alguns minutos) e abre o URL `https://projeto-serios.onrender.com` (ou o nome que a Render atribuir).
+5. Faz uma inscrição de teste. Depois abre `/login` com `ADMIN_EMAIL` e `ADMIN_PASSWORD`.
+
+Se preferires criar à mão: cria **PostgreSQL** (New → PostgreSQL), copia a *Internal Database URL*, cria um **Web Service** (Build: `npm install && npm run build`; Start: `npm start`) e define as 5 variáveis acima.
+
+## 6. Executar localmente
 
 ```bash
-npm install            # instala dependências e gera o package-lock.json
-cp .env.example .env.local
-# preenche o .env.local (secção 7)
-npm run dev            # http://localhost:3000
+npm install
+cp .env.example .env.local     # preenche (DATABASE_URL = External Database URL da Render)
+npm run dev
 ```
 
-Verificações antes de publicar:
+## 7. Segurança
 
-```bash
-npm run typecheck      # tsc --noEmit
-npm run lint
-npm run build
-```
+- A base só é acedida pelo servidor (`lib/db.ts`, consultas parametrizadas). Nenhuma credencial vai para o browser.
+- `/admin` e `/api/admin/*` exigem cookie de sessão assinado (HMAC), verificado no middleware e no servidor. Sem registo público. Cookie `httpOnly`, 8 horas de validade.
+- Login com limite de tentativas e comparação em tempo constante.
+- O CSV neutraliza fórmulas (`=`, `+`, `-`, `@`) no nome e no email.
+- Cabeçalhos de segurança em `next.config.ts`.
 
-> O ZIP não inclui `package-lock.json` porque não foi feita nenhuma instalação. O `npm install` gera-o: faz commit dele no GitHub.
+## 8. Limitações e pendências
 
-## 6. Criar a base de dados no Supabase
-
-1. Cria um projeto em [supabase.com](https://supabase.com).
-2. Abre **SQL Editor → New query**, cola o conteúdo de `supabase/schema.sql` e clica em **Run**. O script é idempotente.
-3. Ele cria `participants`, `tracking_events`, `admins`, ativa **RLS** em todas (nenhuma é acessível pelo navegador), revoga permissões a `anon`/`authenticated` e cria a função `get_admin_stats()` (só executável pela `service_role`).
-
-## 7. Variáveis de ambiente
-
-Em **Supabase → Project Settings → API**:
-
-| Variável | Onde obter | Notas |
-|---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Project URL | pública |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `anon` / public key | pública (sem acesso às tabelas, por causa do RLS) |
-| `SUPABASE_SERVICE_ROLE_KEY` | `service_role` key | **SECRETA**. Só no servidor. Nunca com prefixo `NEXT_PUBLIC_` |
-| `NEXT_PUBLIC_DERIV_AFFILIATE_URL` | o teu link de afiliado Deriv | tem de começar por `https://` |
-
-Sem `NEXT_PUBLIC_DERIV_AFFILIATE_URL`, os botões Deriv devolvem uma mensagem a dizer que o link não está configurado.
-
-## 8. Criar o primeiro administrador
-
-1. No Supabase: **Authentication → Users → Add user → Create new user**. Indica email e palavra-passe forte e marca "Auto Confirm User".
-2. Em **Authentication → Sign In / Providers**, desativa **"Allow new users to sign up"**, para ninguém se registar por conta própria.
-3. No **SQL Editor**, autoriza essa conta como administradora:
-
-```sql
-insert into public.admins (user_id, email)
-select id, email from auth.users where email = 'o-teu-email@exemplo.com';
-```
-
-4. Abre `/login` e entra. Uma conta que exista no Supabase mas não esteja na tabela `admins` é recusada.
-
-Para adicionar outro administrador, repete os passos 1 e 3.
-
-## 9. Publicar no GitHub
-
-```bash
-cd projeto-serios
-git init
-git add .
-git commit -m "Projeto Serio$"
-git branch -M main
-git remote add origin https://github.com/O-TEU-UTILIZADOR/projeto-serios.git
-git push -u origin main
-```
-
-O `.gitignore` já exclui `node_modules`, `.next` e todos os ficheiros `.env*` (exceto `.env.example`). **Nunca** faças commit do `.env.local`.
-
-## 10. Publicar na Vercel
-
-1. Em [vercel.com](https://vercel.com): **Add New → Project** e importa o repositório do GitHub.
-2. A framework é detetada como Next.js.
-3. Em **Environment Variables**, adiciona as 4 variáveis da secção 7 (a `SUPABASE_SERVICE_ROLE_KEY` como variável normal de servidor, sem prefixo `NEXT_PUBLIC_`).
-4. Clica em **Deploy**. Depois, abre o domínio, faz uma inscrição de teste e confirma em `/admin`.
-
-## 11. Segurança: o que está implementado
-
-- A `service_role` key só é usada em código de servidor (`lib/supabase/admin.ts` importa `server-only`). Se alguém a importar num componente de cliente, o build falha.
-- RLS ativo em todas as tabelas, sem políticas de acesso para `anon`/`authenticated`. Contactos nunca ficam expostos.
-- As rotas `/api/admin/*` e a página `/admin` exigem sessão (middleware) **e** pertencer à tabela `admins` (verificado no servidor em cada pedido).
-- Todas as escritas passam pelas rotas do servidor, com validação Zod.
-- O CSV neutraliza células que começam por `=`, `+`, `-`, `@` nos campos escritos pelo utilizador (nome e email).
-- Cabeçalhos de segurança definidos em `next.config.ts`. As rotas não enviam cabeçalhos CORS: só o próprio site as usa.
-
-## 12. Limitações e pendências
-
-- **Limite de pedidos em memória:** em ambiente serverless cada instância tem o seu contador, por isso é uma proteção de melhor esforço. A garantia final contra duplicados está nas restrições `UNIQUE` da base de dados. Para proteção mais forte, ativa o Vercel Firewall / Bot Protection.
-- **Cliques únicos** distinguem-se por um identificador de sessão guardado no navegador; quem limpar os dados do navegador conta como nova sessão.
-- **Tabela do painel** mostra até 500 linhas; o CSV exporta todos os participantes.
-- **Em falta, por não terem sido fornecidos:** data, local e contactos do evento, política de privacidade / termos (recomendado, por recolheres dados pessoais e consentimentos), imagens e logótipo definitivos (coloca em `public/images`).
-- O Excel pode mostrar números de telefone longos em notação científica ao abrir o CSV; importa o ficheiro com **Dados → De texto/CSV** definindo a coluna Telefone como texto.
+- **Planos gratuitos da Render:** o serviço web "adormece" após inatividade (o primeiro acesso demora) e a base de dados gratuita tem prazo de validade. Verifica as condições atuais no painel da Render e, para um evento a sério, usa um plano pago ou faz cópias do CSV regularmente.
+- **Limite de pedidos** em memória (uma instância). A garantia final contra duplicados são as restrições `UNIQUE`.
+- **Em falta, por não terem sido fornecidos:** data, local e contactos do evento, política de privacidade, imagens e logótipo definitivos.
+- O Excel pode mostrar telefones longos em notação científica; importa o CSV com **Dados → De texto/CSV** e define a coluna Telefone como texto.

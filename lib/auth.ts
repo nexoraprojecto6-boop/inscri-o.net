@@ -1,24 +1,17 @@
 import 'server-only';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { getAdminClient } from '@/lib/supabase/admin';
+import { cookies } from 'next/headers';
+import { SESSION_COOKIE, verifySessionToken } from '@/lib/session';
 
 /**
- * Devolve o utilizador autenticado apenas se também estiver na tabela `admins`.
- * Qualquer pessoa autenticada que não esteja nessa tabela é tratada como não autorizada.
+ * Devolve o administrador autenticado (cookie assinado válido e email igual a ADMIN_EMAIL),
+ * ou null. Usado nas páginas e rotas /admin e /api/admin.
  */
-export async function getAdminUser() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+export async function getAdminUser(): Promise<{ email: string } | null> {
+  const store = await cookies();
+  const session = await verifySessionToken(store.get(SESSION_COOKIE)?.value, process.env.AUTH_SECRET);
+  if (!session) return null;
 
-  const { data, error } = await getAdminClient()
-    .from('admins')
-    .select('user_id')
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (error || !data) return null;
-  return user;
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  if (!adminEmail || session.email !== adminEmail) return null;
+  return session;
 }
