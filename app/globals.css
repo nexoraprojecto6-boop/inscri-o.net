@@ -90,3 +90,36 @@
   opacity: 1;
   transform: none;
 }
+
+/* Variantes de revelação (direção e zoom) */
+.reveal-left { transform: translateX(-70px); }
+.reveal-right { transform: translateX(70px); }
+.reveal-zoom { transform: scale(0.9); }
+.reveal.is-visible { transition-delay: var(--d, 0s); }
+
+/* Entrada escalonada dos filhos (listas, chips, cartões) */
+.stagger > * {
+  opacity: 0;
+  transform: translateY(28px) scale(0.97);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.stagger.is-visible > * { opacity: 1; transform: none; }
+.stagger.is-visible > *:nth-child(2) { transition-delay: 0.1s; }
+.stagger.is-visible > *:nth-child(3) { transition-delay: 0.2s; }
+.stagger.is-visible > *:nth-child(4) { transition-delay: 0.3s; }
+.stagger.is-visible > *:nth-child(5) { transition-delay: 0.4s; }
+.stagger.is-visible > *:nth-child(6) { transition-delay: 0.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .stagger > * { opacity: 1 !important; transform: none !important; }
+}
+
+/* Impressão do ingresso */
+@media print {
+  @page { margin: 12mm; }
+  body { background: #fff !important; }
+  .no-print { display: none !important; }
+  #ticket { box-shadow: none !important; break-inside: avoid; }
+  .ticket-cut { background: #fff !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

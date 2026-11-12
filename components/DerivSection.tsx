@@ -6,7 +6,7 @@ export default function DerivSection() {
   return (
     <section id="deriv" className="scroll-mt-20 bg-ink py-20 text-white sm:py-28">
       <div className="container-x grid gap-12 md:grid-cols-2 md:gap-16">
-        <div className="reveal">
+        <div className="reveal reveal-left">
           <p className="eyebrow !text-gold before:!bg-gold">{deriv.eyebrow}</p>
           <h2 className="h-section mt-4">{deriv.title}</h2>
           <div className="mt-6 space-y-4 text-lg leading-relaxed text-white/70">
@@ -21,7 +21,7 @@ export default function DerivSection() {
           <p className="mt-4 max-w-md text-xs leading-relaxed text-white/50">{deriv.disclosure}</p>
         </div>
 
-        <aside className="reveal self-center rounded-3xl border border-gold/40 bg-white/5 p-7 sm:p-9">
+        <aside className="reveal reveal-right self-center rounded-3xl border border-gold/40 bg-white/5 p-7 sm:p-9">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">Importante</p>
           <p className="mt-3 text-base leading-relaxed text-white/80">{deriv.risk}</p>
         </aside>

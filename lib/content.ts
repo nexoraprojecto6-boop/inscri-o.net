@@ -18,8 +18,6 @@ export const content = {
 
   hero: {
     eyebrow: 'Inscrições abertas · Entrada gratuita',
-    title: 'Leva o teu dinheiro a sério.',
-    highlight: 'Projeto Serio$',
     description:
       'Aprende a analisar o mercado e a operar com Deriv bot, com método e responsabilidade. Inscreve-te e recebe as novidades do evento.',
     cta: 'Quero participar',

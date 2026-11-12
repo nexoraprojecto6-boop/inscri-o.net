@@ -10,6 +10,7 @@ import FAQ from '@/components/FAQ';
 import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
 import RevealObserver from '@/components/RevealObserver';
+import WhatsAppFab from '@/components/WhatsAppFab';
 import { event } from '@/lib/event';
 
 const jsonLd = {
@@ -51,6 +52,7 @@ export default function HomePage() {
       </main>
       <Footer />
       <RevealObserver />
+      <WhatsAppFab />
     </>
   );
 }

@@ -7,7 +7,7 @@ export default function EventLocation() {
   return (
     <section id="local" className="scroll-mt-20 bg-paper py-20 sm:py-28">
       <div className="container-x grid items-center gap-12 md:grid-cols-[1fr_1.1fr] md:gap-16">
-        <div className="reveal">
+        <div className="reveal reveal-left">
           <p className="eyebrow">{location.eyebrow}</p>
           <h2 className="h-section mt-4">{location.title}</h2>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-ink/70">{location.text}</p>
@@ -24,14 +24,14 @@ export default function EventLocation() {
           </a>
         </div>
 
-        <figure className="reveal overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-xl">
+        <figure className="reveal reveal-right group overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-xl">
           <Image
             src={event.images.hotel.src}
             alt={event.images.hotel.alt}
             width={event.images.hotel.width}
             height={event.images.hotel.height}
             sizes="(min-width: 768px) 55vw, 100vw"
-            className="h-auto w-full"
+            className="h-auto w-full transition duration-[1200ms] group-hover:scale-105"
           />
           <figcaption className="px-5 py-3 text-sm text-ink/60">
             {event.venue} · {event.city}, {event.country}

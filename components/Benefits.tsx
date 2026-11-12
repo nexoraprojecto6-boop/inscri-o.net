@@ -14,7 +14,7 @@ export default function Benefits() {
           {benefits.items.map((item, i) => (
             <article
               key={item.title}
-              className="reveal group relative overflow-hidden rounded-3xl border border-ink/5 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_-24px_rgba(17,17,17,.35)] sm:p-9"
+              className="reveal reveal-zoom group relative overflow-hidden rounded-3xl border border-ink/5 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_-24px_rgba(17,17,17,.35)] sm:p-9"
               style={{ transitionDelay: `${i * 60}ms` }}
             >
               <span className="font-display text-5xl font-extrabold text-gold transition group-hover:text-brand">

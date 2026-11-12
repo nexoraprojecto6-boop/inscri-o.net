@@ -14,7 +14,7 @@ export default function Process() {
           {process.steps.map((s, i) => (
             <li
               key={s.title}
-              className="reveal relative border-t-2 border-ink pt-6"
+              className="reveal reveal-zoom relative border-t-2 border-ink pt-6"
               style={{ transitionDelay: `${i * 80}ms` }}
             >
               <span className="grid h-10 w-10 place-items-center rounded-full bg-brand font-display text-lg font-extrabold text-white">

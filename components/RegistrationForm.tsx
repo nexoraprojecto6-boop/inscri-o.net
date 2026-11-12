@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { registrationSchema } from '@/lib/validations';
 import { COUNTRIES, DEFAULT_COUNTRY_CODE } from '@/lib/countries';
 import { content } from '@/lib/content';
@@ -23,6 +24,7 @@ export default function RegistrationForm() {
   const [formError, setFormError] = useState('');
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [ticketId, setTicketId] = useState<string | null>(null);
 
   const startedAt = useRef<number>(0);
   const submitting = useRef(false);
@@ -82,7 +84,10 @@ export default function RegistrationForm() {
         return;
       }
 
-      if (data.id) saveParticipantId(data.id);
+      if (data.id) {
+        saveParticipantId(data.id);
+        setTicketId(data.id);
+      }
       setDone(true);
       window.dispatchEvent(new Event('registration:created'));
     } catch {
@@ -99,6 +104,11 @@ export default function RegistrationForm() {
         <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gold text-3xl">✓</div>
         <h3 className="mt-5 font-display text-3xl font-extrabold">{content.form.success.title}</h3>
         <p className="mx-auto mt-3 max-w-sm text-ink/70">{content.form.success.text}</p>
+        {ticketId && (
+          <Link href={`/ingresso/${ticketId}`} className="btn-primary mt-6">
+            Ver e imprimir o meu ingresso <span aria-hidden>→</span>
+          </Link>
+        )}
         {hasDeriv === false && (
           <div className="mt-8 rounded-2xl bg-paper p-5">
             <p className="text-sm text-ink/70">Ainda não tens conta na Deriv? Podes criá-la quando quiseres.</p>

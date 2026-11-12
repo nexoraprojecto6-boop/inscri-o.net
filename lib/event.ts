@@ -23,6 +23,11 @@ export const event = {
 
   entry: 'Entrada gratuita',
 
+  // Link do grupo de WhatsApp. Define NEXT_PUBLIC_WHATSAPP_GROUP_URL (Vercel/Render)
+  // ou troca o valor por omissão abaixo pelo teu link (https://chat.whatsapp.com/...).
+  whatsappGroupUrl:
+    process.env.NEXT_PUBLIC_WHATSAPP_GROUP_URL || 'https://chat.whatsapp.com/COLOCA_AQUI_O_CODIGO_DO_GRUPO',
+
   speakers: [
     { name: 'Kelvin da Silva', tag: '' },
     { name: 'Domingos Fernando', tag: 'Fx' },
