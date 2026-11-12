@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { event, eventCountdown } from '@/lib/event';
 
@@ -76,9 +77,9 @@ export default function EventCard() {
           )}
         </div>
         <div className="flex flex-col gap-2 text-sm">
-          <a href="/" className="text-white/70 underline-offset-4 transition hover:text-gold hover:underline">
+          <Link href="/" className="text-white/70 underline-offset-4 transition hover:text-gold hover:underline">
             Ver landing page
-          </a>
+          </Link>
           <a
             href={event.mapsUrl}
             target="_blank"
