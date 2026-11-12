@@ -2,14 +2,14 @@
  * Todos os textos e dados da landing page estão aqui.
  * Edita este ficheiro para alterar conteúdos sem mexer nos componentes.
  *
- * Nota: a data, o local e os contactos ainda NÃO foram fornecidos.
- * Preenche os campos "eventDetails" e "contact" quando tiveres a informação oficial.
+ * Nota: os dados do evento (data, hora, local, oradores) vivem em lib/event.ts.
  */
 export const content = {
   brand: { name: 'Projeto Serio$', short: 'Serio$' },
 
   nav: [
     { label: 'O evento', href: '#evento' },
+    { label: 'Local', href: '#local' },
     { label: 'Benefícios', href: '#beneficios' },
     { label: 'Deriv', href: '#deriv' },
     { label: 'Como participar', href: '#processo' },
@@ -17,28 +17,22 @@ export const content = {
   ],
 
   hero: {
-    eyebrow: 'Inscrições abertas',
+    eyebrow: 'Inscrições abertas · Entrada gratuita',
     title: 'Leva o teu dinheiro a sério.',
     highlight: 'Projeto Serio$',
     description:
-      'Um evento para quem quer aprender, com método e responsabilidade, como funcionam os mercados financeiros online. Inscreve-te e recebe as novidades em primeira mão.',
+      'Aprende a analisar o mercado e a operar com Deriv bot, com método e responsabilidade. Inscreve-te e recebe as novidades do evento.',
     cta: 'Quero participar',
     secondaryCta: 'Saber mais',
-    marquee: ['Aprender', 'Praticar', 'Gerir risco', 'Crescer em comunidade', 'Decidir com método'],
+    marquee: ['Aprenda', 'Pratique', 'Evolua', 'Análise técnica', 'Deriv bot', 'Gerir risco'],
   },
 
   about: {
     eyebrow: 'O evento',
     title: 'Um ponto de partida sério para quem quer aprender.',
     paragraphs: [
-      'O Projeto Serio$ reúne pessoas interessadas em compreender o trading e os mercados financeiros de forma clara, prática e responsável.',
+      'No dia 28 de Novembro de 2026, às 15h, no Hotel Flow, em Benguela, vais aprender a fazer análises técnicas e dar os primeiros passos com o Deriv bot, de forma clara, prática e responsável.',
       'Ao inscreveres-te, ficas na lista de participantes e és informado sobre os próximos passos do evento.',
-    ],
-    // Preencher quando a informação oficial estiver disponível.
-    eventDetails: [
-      { label: 'Data', value: 'A anunciar' },
-      { label: 'Local / formato', value: 'A anunciar' },
-      { label: 'Contacto', value: 'A anunciar' },
     ],
   },
 
@@ -96,7 +90,7 @@ export const content = {
     items: [
       {
         q: 'A inscrição tem custos?',
-        a: 'Não. Preencher o formulário de inscrição é gratuito.',
+        a: 'Não. A inscrição e a entrada no evento são gratuitas.',
       },
       {
         q: 'Preciso de ter conta na Deriv para me inscrever?',
@@ -104,7 +98,11 @@ export const content = {
       },
       {
         q: 'Quando e onde decorre o evento?',
-        a: 'A data e o local ainda serão anunciados. Quem se inscrever será informado.',
+        a: 'No dia 28 de Novembro de 2026, às 15h, no Hotel Flow, em Benguela. A entrada é gratuita.',
+      },
+      {
+        q: 'Quem são os oradores?',
+        a: 'Kelvin da Silva e Domingos Fernando (Fx), com o apoio da Deriv Partners.',
       },
       {
         q: 'Como vão usar os meus dados?',
@@ -119,6 +117,13 @@ export const content = {
         a: 'Não. O trading envolve risco e podes perder dinheiro. O objetivo é educativo.',
       },
     ],
+  },
+
+  location: {
+    eyebrow: 'Onde',
+    title: 'Hotel Flow, em Benguela.',
+    text: 'O evento decorre no Hotel Flow, em Benguela. Abre o mapa para veres como chegar.',
+    cta: 'Ver no mapa',
   },
 
   finalCta: {
@@ -137,6 +142,6 @@ export const content = {
   },
 
   footer: {
-    note: 'Conteúdo educativo. O trading envolve risco de perda do capital.',
+    note: 'Conteúdo educativo. Não é aconselhamento de investimento. O trading envolve risco de perda do capital.',
   },
 } as const;

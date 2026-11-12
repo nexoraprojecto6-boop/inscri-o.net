@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { AdminData } from '@/lib/types';
 import Logo from '@/components/Logo';
+import EventCard from './EventCard';
 import StatisticsCards from './StatisticsCards';
 import ParticipantsTable from './ParticipantsTable';
 
@@ -103,6 +104,8 @@ export default function AdminDashboard({ email }: { email: string }) {
             {error}
           </p>
         )}
+
+        <EventCard />
 
         <StatisticsCards stats={data?.stats ?? null} />
 

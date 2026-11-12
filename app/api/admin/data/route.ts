@@ -17,7 +17,10 @@ const STATS_SQL = `select
   (select count(*) from participants where has_deriv_account)::int                    as with_deriv_account,
   (select count(*) from participants where not has_deriv_account)::int                as without_deriv_account,
   (select count(*) from tracking_events where event_type = 'deriv_click')::int        as total_clicks,
-  (select count(distinct session_id) from tracking_events where event_type = 'deriv_click')::int as unique_clicks`;
+  (select count(distinct session_id) from tracking_events where event_type = 'deriv_click')::int as unique_clicks,
+  (select count(*) from participants
+     where created_at >= (date_trunc('day', now() at time zone 'Africa/Luanda') at time zone 'Africa/Luanda'))::int as registrations_today,
+  (select count(*) from participants where created_at >= now() - interval '7 days')::int as registrations_7d`;
 
 // Escapa % _ \ para a pesquisa ilike tratar o texto literalmente.
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, '\\$&');

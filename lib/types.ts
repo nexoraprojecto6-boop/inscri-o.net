@@ -5,6 +5,8 @@ export type Stats = {
   without_deriv_account: number;
   total_clicks: number;
   unique_clicks: number;
+  registrations_today: number;
+  registrations_7d: number;
 };
 
 export type Participant = {

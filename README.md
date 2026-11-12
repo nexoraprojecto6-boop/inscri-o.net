@@ -95,3 +95,10 @@ npm run dev
 - **Primeiro pedido lento:** no plano gratuito, a Render adormece; o primeiro pedido que chega pelo proxy da Vercel pode demorar.
 - **Em falta, por não terem sido fornecidos:** data, local e contactos do evento, política de privacidade, imagens e logótipo definitivos.
 - O Excel pode mostrar telefones longos em notação científica; importa o CSV com **Dados → De texto/CSV** e define a coluna Telefone como texto.
+
+## 7. Dados do evento e imagens
+
+- `lib/event.ts` é a fonte única dos dados da capa (título, data, hora, local, oradores, apoio, aviso). A landing, o SEO (Open Graph e JSON-LD de evento) e o painel `/admin` leem daqui.
+- Imagens em `public/images/`: `evento-capa.png` (capa) e `hotel-flow.jpg` (Hotel Flow). Para trocar, substitui o ficheiro mantendo o nome, ou ajusta `images` em `lib/event.ts`.
+- O painel mostra o cartão do evento com contagem decrescente e os indicadores (total, hoje, últimos 7 dias, contas Deriv, cliques).
+- Opcional: define `NEXT_PUBLIC_SITE_URL` (ex.: `https://teu-dominio.com`) na Vercel para que a pré-visualização ao partilhar o link use o domínio certo.
