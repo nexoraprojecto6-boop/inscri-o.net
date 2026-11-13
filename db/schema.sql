@@ -1,4 +1,4 @@
--- Projeto Serio$ — esquema PostgreSQL (referência).
+-- Inscri-Ticket — esquema PostgreSQL (referência).
 -- A aplicação aplica este esquema automaticamente no primeiro acesso (lib/schema-sql.ts).
 -- Só precisas de o correr manualmente se quiseres (idempotente).
 

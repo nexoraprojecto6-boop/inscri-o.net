@@ -35,6 +35,11 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'scale(.9)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
         },
+        cover: {
+          '0%': { opacity: '0', transform: 'scale(.82) rotate(-5deg) translateY(40px)', filter: 'blur(14px)' },
+          '60%': { opacity: '1', filter: 'blur(0)' },
+          '100%': { opacity: '1', transform: 'scale(1) rotate(0) translateY(0)', filter: 'blur(0)' },
+        },
         shine: {
           '0%': { transform: 'translateX(-120%) skewX(-20deg)' },
           '100%': { transform: 'translateX(320%) skewX(-20deg)' },
@@ -42,6 +47,7 @@ const config: Config = {
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
+        cover: 'cover 1.4s cubic-bezier(.2,.8,.2,1) both',
         'zoom-in': 'zoom-in .9s cubic-bezier(.2,.7,.2,1) both',
         shine: 'shine 3.2s ease-in-out infinite',
         marquee: 'marquee 32s linear infinite',

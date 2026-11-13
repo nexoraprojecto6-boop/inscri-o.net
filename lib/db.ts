@@ -29,7 +29,7 @@ function getPool(): Pool {
     console.error('[db:pool]', err);
   });
 
-  // Todas as tabelas do Projeto Serio$ vivem no esquema "serios", isoladas de outras
+  // Todas as tabelas da Inscri-Ticket vivem no esquema "serios", isoladas de outras
   // tabelas que a mesma base de dados possa ter (ex.: de outros projetos).
   pool.on('connect', (client) => {
     void client.query('set search_path to serios');

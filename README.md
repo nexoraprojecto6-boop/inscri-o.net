@@ -1,6 +1,6 @@
-# Projeto Serio$
+# Inscri-Ticket
 
-Landing page de inscrição para o evento **Projeto Serio$**, com base de dados PostgreSQL (Render), contagem pública de inscritos, rastreio de cliques no link de afiliado Deriv e painel administrativo simples em `/admin`.
+Landing page de inscrição para o evento, sob a marca **Inscri-Ticket**, com base de dados PostgreSQL (Render), contagem pública de inscritos, rastreio de cliques no link de afiliado Deriv e painel administrativo simples em `/admin`.
 
 > **Estado dos testes:** o código foi escrito sem executar `npm install`, `tsc`, lint ou build. Na primeira publicação, se o build falhar, copia o erro do log para o suporte e corrige.
 
@@ -108,4 +108,5 @@ npm run dev
 - **Ingresso:** depois da inscrição, o formulário mostra o botão "Ver e imprimir o meu ingresso" (`/ingresso/<id>`). A página `components/Ticket.tsx` mostra o cartão com a capa do evento, o nome do participante e o número, com botão de imprimir (CSS `@media print` em `app/globals.css`). O `<id>` é o UUID da inscrição (impossível de adivinhar). A rota `GET /api/ticket/[id]` devolve só nome e número, nunca email ou telefone. Não há alterações à base de dados.
 - **Grupo de WhatsApp:** define `NEXT_PUBLIC_WHATSAPP_GROUP_URL` (ex.: `https://chat.whatsapp.com/XXXX`) na Vercel e na Render, ou edita `whatsappGroupUrl` em `lib/event.ts`. O botão redondo flutuante está em `components/WhatsAppFab.tsx`.
 - **Animações:** `components/RevealObserver.tsx` (barra de progresso, parallax com `data-parallax`, revelação `.reveal`, `.reveal-left`, `.reveal-right`, `.reveal-zoom` e `.stagger`). Respeita `prefers-reduced-motion`.
-- O título do hero é agora o nome do workshop (`event.title`), igual ao do cartaz.
+- O título do hero é o nome do workshop (`event.title`), igual ao do cartaz. A marca visível em todo o site é **Inscri-Ticket** (`components/Logo.tsx` e `lib/content.ts`). O esquema `serios` da base de dados e o serviço `projeto-serios` da Render mantêm o nome interno para não perder dados nem mudar o URL.
+- **Capa primeiro no telemóvel:** `components/MobileCover.tsx` mostra a capa em ecrã inteiro, com animação, antes das informações.

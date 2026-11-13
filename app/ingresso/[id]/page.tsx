@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Ticket from '@/components/Ticket';
 
 export const metadata: Metadata = {
-  title: 'O meu ingresso | Projeto Serio$',
+  title: 'O meu ingresso | Inscri-Ticket',
   robots: { index: false, follow: false },
 };
 

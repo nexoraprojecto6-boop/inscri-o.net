@@ -9,10 +9,7 @@ const pct = (part: number, total: number) => (total > 0 ? `${Math.round((part / 
 /** Indicadores reais, lidos da base de dados PostgreSQL. */
 export default function StatisticsCards({ stats }: { stats: Stats | null }) {
   const cards: CardData[] = [
-    { label: 'Total de inscritos', value: stats?.total_participants, dark: true },
-    { label: 'Inscrições hoje', value: stats?.registrations_today, hint: 'Dia de calendário em hora de Angola.' },
-    { label: 'Últimos 7 dias', value: stats?.registrations_7d },
-    { label: 'Telefones recolhidos', value: stats?.total_phones },
+    { label: 'Telefones recolhidos', value: stats?.total_phones, dark: true },
     {
       label: 'Declararam ter conta Deriv',
       value: stats?.with_deriv_account,

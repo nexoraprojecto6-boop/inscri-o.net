@@ -1,5 +1,5 @@
 -- =====================================================================
--- Projeto Serio$ — Esquema da base de dados (Supabase / PostgreSQL)
+-- Inscri-Ticket — Esquema da base de dados (Supabase / PostgreSQL)
 -- Executar uma única vez em: Supabase → SQL Editor → New query → Run
 -- O script é idempotente (pode ser executado novamente sem erros).
 -- =====================================================================

@@ -23,7 +23,7 @@ const description = `${event.subtitle}. ${event.dateLabel}, ${event.timeLabel}, 
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: `${event.title} | Projeto Serio$`,
+  title: `${event.title} | Inscri-Ticket`,
   description,
   openGraph: {
     title: event.title,

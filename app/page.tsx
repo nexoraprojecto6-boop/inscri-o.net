@@ -1,13 +1,7 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import AboutEvent from '@/components/AboutEvent';
-import EventLocation from '@/components/EventLocation';
-import Benefits from '@/components/Benefits';
-import DerivSection from '@/components/DerivSection';
-import Process from '@/components/Process';
+import MobileCover from '@/components/MobileCover';
 import RegistrationSection from '@/components/RegistrationSection';
-import FAQ from '@/components/FAQ';
-import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
 import RevealObserver from '@/components/RevealObserver';
 import WhatsAppFab from '@/components/WhatsAppFab';
@@ -40,15 +34,11 @@ export default function HomePage() {
       />
       <Header />
       <main>
-        <Hero />
-        <AboutEvent />
-        <EventLocation />
-        <Benefits />
-        <DerivSection />
-        <Process />
+        <div id="top">
+          <MobileCover />
+          <Hero />
+        </div>
         <RegistrationSection />
-        <FAQ />
-        <FinalCTA />
       </main>
       <Footer />
       <RevealObserver />

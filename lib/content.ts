@@ -5,7 +5,7 @@
  * Nota: os dados do evento (data, hora, local, oradores) vivem em lib/event.ts.
  */
 export const content = {
-  brand: { name: 'Projeto Serio$', short: 'Serio$' },
+  brand: { name: 'Inscri-Ticket', short: 'Inscri-Ticket' },
 
   nav: [
     { label: 'O evento', href: '#evento' },
@@ -66,7 +66,7 @@ export const content = {
     ],
     cta: 'Criar conta na Deriv',
     disclosure:
-      'Transparência: este é um link de afiliado. O Projeto Serio$ pode receber uma comissão se criares conta, sem custo adicional para ti.',
+      'Transparência: este é um link de afiliado. A Inscri-Ticket pode receber uma comissão se criares conta, sem custo adicional para ti.',
     risk:
       'Aviso de risco: o trading envolve risco elevado e pode resultar na perda do capital investido. Investe apenas o que podes perder. Este evento não constitui aconselhamento financeiro nem garante resultados.',
   },
@@ -104,7 +104,7 @@ export const content = {
       },
       {
         q: 'Como vão usar os meus dados?',
-        a: 'Os teus dados servem apenas para te contactar sobre o Projeto Serio$ e são guardados de forma protegida. Só recebes SMS ou WhatsApp se marcares essa autorização.',
+        a: 'Os teus dados servem apenas para te contactar sobre este evento e são guardados de forma protegida. Só recebes SMS ou WhatsApp se marcares essa autorização.',
       },
       {
         q: 'Clicar no link da Deriv cria logo uma conta?',
@@ -131,7 +131,7 @@ export const content = {
   },
 
   form: {
-    title: 'Inscreve-te no Projeto Serio$',
+    title: 'Garante o teu ingresso',
     subtitle: 'Preenche os dados abaixo. É rápido e gratuito.',
     success: {
       title: 'Inscrição confirmada!',

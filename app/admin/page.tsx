@@ -6,7 +6,7 @@ import { getAdminUser } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Painel administrativo | Projeto Serio$',
+  title: 'Painel administrativo | Inscri-Ticket',
   robots: { index: false, follow: false },
 };
 

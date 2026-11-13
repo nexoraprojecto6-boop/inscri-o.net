@@ -7,6 +7,7 @@ import { COUNTRIES, DEFAULT_COUNTRY_CODE } from '@/lib/countries';
 import { content } from '@/lib/content';
 import { saveParticipantId } from '@/lib/utils';
 import DerivLink from './DerivLink';
+import { TicketCard, JoinWhatsAppButton } from './TicketCard';
 
 type FieldErrors = Partial<Record<string, string>>;
 
@@ -16,8 +17,8 @@ export default function RegistrationForm() {
   const [countryCode, setCountryCode] = useState(DEFAULT_COUNTRY_CODE);
   const [phone, setPhone] = useState('');
   const [hasDeriv, setHasDeriv] = useState<boolean | null>(null);
-  const [sms, setSms] = useState(false);
-  const [whatsapp, setWhatsapp] = useState(false);
+  const sms = false; // consentimentos opcionais removidos do formulário
+  const whatsapp = false;
   const [website, setWebsite] = useState(''); // honeypot (campo isco)
 
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -31,6 +32,10 @@ export default function RegistrationForm() {
   useEffect(() => {
     startedAt.current = Date.now();
   }, []);
+
+  useEffect(() => {
+    if (done) document.getElementById('inscricao')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [done]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -99,20 +104,33 @@ export default function RegistrationForm() {
   }
 
   if (done) {
+    const code = ticketId ? ticketId.slice(0, 8).toUpperCase() : '';
     return (
-      <div className="py-8 text-center" role="status">
-        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-gold text-3xl">✓</div>
-        <h3 className="mt-5 font-display text-3xl font-extrabold">{content.form.success.title}</h3>
-        <p className="mx-auto mt-3 max-w-sm text-ink/70">{content.form.success.text}</p>
+      <div className="text-center" role="status">
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-gold text-2xl">✓</div>
+        <h3 className="mt-4 font-display text-2xl font-extrabold">{content.form.success.title}</h3>
+        <p className="mx-auto mt-2 max-w-sm text-sm text-ink/70">Este é o teu ingresso.</p>
+
         {ticketId && (
-          <Link href={`/ingresso/${ticketId}`} className="btn-primary mt-6">
-            Ver e imprimir o meu ingresso <span aria-hidden>→</span>
-          </Link>
+          <div className="mt-6">
+            <TicketCard name={fullName.trim()} code={code} />
+            <div className="no-print mt-6 flex flex-col gap-3">
+              <JoinWhatsAppButton name={fullName.trim()} code={code} className="w-full" />
+              <p className="text-xs text-ink/55">
+                Ao tocar no botão, o ingresso é guardado no teu aparelho (PNG) e abre-se o grupo do WhatsApp.
+              </p>
+              <Link href={`/ingresso/${ticketId}`} className="text-sm font-semibold text-brand underline-offset-4 hover:underline">
+                Abrir página do ingresso para imprimir
+              </Link>
+            </div>
+          </div>
         )}
+
         {hasDeriv === false && (
-          <div className="mt-8 rounded-2xl bg-paper p-5">
+          <div className="no-print mt-8 rounded-2xl bg-paper p-5 text-center">
             <p className="text-sm text-ink/70">Ainda não tens conta na Deriv? Podes criá-la quando quiseres.</p>
             <DerivLink className="btn-primary mt-4">Criar conta na Deriv ↗</DerivLink>
+            <p className="mt-3 text-xs text-ink/50">{content.deriv.disclosure}</p>
           </div>
         )}
       </div>
@@ -240,35 +258,6 @@ export default function RegistrationForm() {
           })}
         </div>
         {errors.hasDerivAccount && <p className="error-text">{errors.hasDerivAccount}</p>}
-
-        {hasDeriv === false && (
-          <div className="mt-4 flex flex-col items-start gap-3 rounded-xl bg-paper p-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-ink/70">Podes criar a tua conta agora através do nosso link de afiliado.</p>
-            <DerivLink className="btn-gold shrink-0 !py-2.5">Criar conta ↗</DerivLink>
-          </div>
-        )}
-      </fieldset>
-
-      <fieldset className="space-y-3 rounded-xl bg-paper p-4">
-        <legend className="sr-only">Consentimentos (opcionais)</legend>
-        <label className="flex cursor-pointer items-start gap-3 text-sm text-ink/80">
-          <input
-            type="checkbox"
-            className="mt-0.5 h-4 w-4 accent-[#E32636]"
-            checked={sms}
-            onChange={(e) => setSms(e.target.checked)}
-          />
-          Aceito receber comunicações por SMS.
-        </label>
-        <label className="flex cursor-pointer items-start gap-3 text-sm text-ink/80">
-          <input
-            type="checkbox"
-            className="mt-0.5 h-4 w-4 accent-[#E32636]"
-            checked={whatsapp}
-            onChange={(e) => setWhatsapp(e.target.checked)}
-          />
-          Aceito receber comunicações pelo WhatsApp.
-        </label>
       </fieldset>
 
       {formError && (
@@ -289,7 +278,7 @@ export default function RegistrationForm() {
       </button>
 
       <p className="text-center text-xs text-ink/50">
-        Os teus dados são usados apenas para te contactar sobre o Projeto Serio$.
+        Os teus dados são usados apenas para te contactar sobre este evento. Ingresso emitido pela Inscri-Ticket.
       </p>
     </form>
   );
