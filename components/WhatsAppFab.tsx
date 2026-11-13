@@ -1,10 +1,13 @@
-import { event } from '@/lib/event';
+'use client';
+
+import { useWhatsappUrl } from '@/lib/use-settings';
 
 /** Botão redondo flutuante para entrar no grupo do WhatsApp. */
 export default function WhatsAppFab() {
+  const url = useWhatsappUrl();
   return (
     <a
-      href={event.whatsappGroupUrl}
+      href={url}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Entrar no grupo do WhatsApp"

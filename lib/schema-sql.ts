@@ -53,4 +53,10 @@ create index if not exists tracking_events_session_idx
   on tracking_events (session_id);
 create index if not exists tracking_events_participant_idx
   on tracking_events (participant_id);
+
+create table if not exists settings (
+  key        text primary key check (key in ('whatsapp_url', 'deriv_url')),
+  value      text        not null,
+  updated_at timestamptz not null default now()
+);
 `;

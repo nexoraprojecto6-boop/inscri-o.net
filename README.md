@@ -110,3 +110,12 @@ npm run dev
 - **Animações:** `components/RevealObserver.tsx` (barra de progresso, parallax com `data-parallax`, revelação `.reveal`, `.reveal-left`, `.reveal-right`, `.reveal-zoom` e `.stagger`). Respeita `prefers-reduced-motion`.
 - O título do hero é o nome do workshop (`event.title`), igual ao do cartaz. A marca visível em todo o site é **Inscri-Ticket** (`components/Logo.tsx` e `lib/content.ts`). O esquema `serios` da base de dados e o serviço `projeto-serios` da Render mantêm o nome interno para não perder dados nem mudar o URL.
 - **Capa primeiro no telemóvel:** `components/MobileCover.tsx` mostra a capa em ecrã inteiro, com animação, antes das informações.
+
+## 9. Painel separado (Vercel)
+
+A pasta `admin-vercel/` é um segundo projeto Next.js, só para administração (ver `admin-vercel/README.md`).
+Na Vercel, cria um projeto novo com **Root Directory = `admin-vercel`**. O projeto do site continua a usar a raiz.
+
+- Na **Render**, define `ADMIN_API_KEY` (≥ 24 caracteres, igual à do painel). Ela protege as rotas `/api/panel/*`.
+- O link do grupo de WhatsApp e o link da Deriv passam a ser guardados na base de dados (tabela `settings`) e editados no painel.
+  Se estiverem vazios, usam-se `NEXT_PUBLIC_WHATSAPP_GROUP_URL` / `lib/event.ts` e `NEXT_PUBLIC_DERIV_AFFILIATE_URL`.

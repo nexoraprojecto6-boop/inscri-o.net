@@ -2,19 +2,9 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { sessionIdSchema, uuidSchema } from '@/lib/validations';
 import { getClientIp, rateLimit } from '@/lib/rate-limit';
+import { getSettings } from '@/lib/settings';
 
 export const dynamic = 'force-dynamic';
-
-function getAffiliateUrl(): string | null {
-  const raw = process.env.NEXT_PUBLIC_DERIV_AFFILIATE_URL?.trim();
-  if (!raw) return null;
-  try {
-    const url = new URL(raw);
-    return url.protocol === 'https:' ? url.toString() : null;
-  } catch {
-    return null;
-  }
-}
 
 const INSERT_SQL = `insert into tracking_events (event_type, session_id, participant_id, user_agent)
                     values ('deriv_click', $1, $2, $3)`;
@@ -25,7 +15,9 @@ const INSERT_SQL = `insert into tracking_events (event_type, session_id, partici
  * Um clique NÃO prova que foi criada uma conta.
  */
 export async function GET(request: Request) {
-  const affiliateUrl = getAffiliateUrl();
+  const affiliateUrl = await getSettings()
+    .then((s) => s.derivUrl)
+    .catch(() => null);
   if (!affiliateUrl) {
     return new NextResponse('O link de afiliado Deriv ainda não foi configurado.', { status: 503 });
   }

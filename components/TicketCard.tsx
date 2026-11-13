@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { event } from '@/lib/event';
 import { downloadTicketPng } from '@/lib/ticket-image';
+import { useWhatsappUrl } from '@/lib/use-settings';
 import Logo from './Logo';
 
 /** Código de barras decorativo, gerado a partir do número do ingresso. */
@@ -93,6 +94,7 @@ export function TicketCard({ name, code }: { name: string; code: string }) {
  */
 export function JoinWhatsAppButton({ name, code, className = '' }: { name: string; code: string; className?: string }) {
   const [busy, setBusy] = useState(false);
+  const whatsappUrl = useWhatsappUrl();
 
   async function onClick() {
     if (busy) return;
@@ -104,7 +106,7 @@ export function JoinWhatsAppButton({ name, code, className = '' }: { name: strin
     }
     // Pequena pausa para o telemóvel iniciar o download antes de abrir o WhatsApp.
     setTimeout(() => {
-      window.location.href = event.whatsappGroupUrl;
+      window.location.href = whatsappUrl;
       setBusy(false);
     }, 900);
   }
